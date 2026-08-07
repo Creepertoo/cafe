@@ -1,16 +1,26 @@
-# Used for local development only (`wrangler pages dev`).
-# Production bindings are configured in the Cloudflare dashboard under
-# Pages project > Settings > Functions (see README Step 5) and are
-# independent of this file.
-name = "urban-plaza-cafe"
-pages_build_output_dir = "public"
+# This project deploys as a single Cloudflare Worker with static assets
+# (via `wrangler deploy`) rather than classic Pages. `name` must match your
+# actual Cloudflare project name exactly, or the dashboard will keep warning
+# about a mismatch, change it below if yours isn't "cafe".
+name = "cafe"
+main = "worker/index.js"
 compatibility_date = "2024-09-23"
 
+[assets]
+directory = "public"
+binding = "ASSETS"
+
+# After creating the D1 database (README Step 2), replace database_id below
+# with the real id shown on its dashboard page (or run `wrangler d1 create
+# urban-plaza-cafe` and copy the id it prints). If your project's Settings
+# page has a "Bindings" section, adding it there instead also works and you
+# can leave this placeholder as-is.
 [[d1_databases]]
 binding = "DB"
 database_name = "urban-plaza-cafe"
 database_id = "00000000-0000-0000-0000-000000000000"
 
+# Same idea for R2: bind it here, or via Settings > Bindings if available.
 [[r2_buckets]]
 binding = "STORAGE"
 bucket_name = "urban-plaza-cafe-photos"

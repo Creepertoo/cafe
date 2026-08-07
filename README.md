@@ -1,12 +1,17 @@
-# Urban Plaza Cafe — Cloudflare Pages
+# Urban Plaza Cafe — Cloudflare Worker
 
 The full site rebuilt on Cloudflare's own stack: a static frontend (animated
 home page with a draggable 3D coffee-cup showcase, live menu, order-request
-page, reviews section) served from Cloudflare Pages, with the backend as
-Pages Functions backed by a D1 database, photo uploads in R2, and order
-notification emails sent through Resend. No online payment, order requests
-save to the admin panel and email you; the customer pays in person or by
-phone.
+page, reviews section) served as static assets from a Cloudflare Worker,
+with the backend as API routes in that same Worker, backed by a D1 database,
+photo uploads in R2, and order notification emails sent through Resend. No
+online payment, order requests save to the admin panel and email you; the
+customer pays in person or by phone.
+
+This deploys as a **Worker with static assets** (via `wrangler deploy`),
+which is what Cloudflare's dashboard sets up by default now when you connect
+a git repo under Workers & Pages, rather than the older separate "Pages"
+product. Functionally identical, just a different build path.
 
 ## What's real vs. placeholder
 
@@ -21,56 +26,60 @@ time was confirmed by Google).
 ## What you'll set up
 
 - A **GitHub repo** with this code (you push it, Cloudflare builds from it)
-- A **Cloudflare Pages** project connected to that repo
+- A **Cloudflare Worker** connected to that repo (Workers & Pages > your project)
 - A **D1 database** (Cloudflare's serverless SQLite) for menu/orders/reviews/settings
 - An **R2 bucket** for uploaded photos
 - A free **Resend** account for the order notification email
 
 None of this needs a credit card beyond what you already have for Cloudflare;
-D1, R2, and Pages all have generous free tiers for a small business site.
+D1, R2, and Workers all have generous free tiers for a small business site.
 
 ## Step 1: push to GitHub
 
-Create a new GitHub repo and push this folder to it (via GitHub's "Upload
-files" in the browser, or `git init && git add -A && git commit -m "Urban Plaza Cafe" && git push`
-from your machine if you have git installed).
+Push this folder's contents to your GitHub repo (replace what's there now):
+via GitHub's "Upload files" in the browser (drag in every file/folder from
+this project, keeping the same structure), or
+`git add -A && git commit -m "Fix Cloudflare deploy" && git push` from your
+machine if you have git installed.
+
+Before you push, open `wrangler.toml` in this project and check the `name`
+field matches your actual Cloudflare project name exactly (the one shown at
+the top of its dashboard page, `cafe` in the screenshot you shared). Change
+it if it's different.
 
 ## Step 2: create the D1 database
 
 1. Cloudflare dashboard -> **Workers & Pages > D1** -> **Create database**.
-   Name it e.g. `urban-plaza-cafe`.
+   Name it `urban-plaza-cafe` (matches `schema.sql` and `wrangler.toml`).
 2. Open the new database -> **Console** tab.
 3. Paste the entire contents of `schema.sql` (in this repo) and run it. This
    creates the tables and loads the starter menu/reviews/settings.
+4. On the database's **Overview** tab, copy its **Database ID** (a UUID).
+   Open `wrangler.toml` in your repo and replace the placeholder
+   `database_id` under `[[d1_databases]]` with it, then commit and push.
+   (Skip this if your project's Settings page has its own **Bindings**
+   section where you can attach the D1 database directly, either way works,
+   just don't do both or they can conflict.)
 
 ## Step 3: create the R2 bucket
 
-Cloudflare dashboard -> **R2** -> **Create bucket**. Name it e.g.
-`urban-plaza-cafe-photos`.
+Cloudflare dashboard -> **R2** -> **Create bucket**. Name it
+`urban-plaza-cafe-photos` (matches `wrangler.toml`).
 
-## Step 4: create the Pages project
+## Step 4: redeploy
 
-1. Cloudflare dashboard -> **Workers & Pages** -> **Create application** ->
-   **Pages** -> **Connect to Git**, and pick your new GitHub repo.
-2. Build settings:
-   - Framework preset: **None**
-   - Build command: *(leave empty)*
-   - Build output directory: `public`
-3. Deploy. It will succeed but the site won't fully work yet, it still needs
-   the bindings and secrets from the next step.
+Your project is already connected to the repo (that's the screenshot you
+showed). With `wrangler.toml` fixed and pushed, go to the project's
+**Deployments** tab and retry the failed deployment, or just push a commit
+to trigger a new one. The build log should now show
+`Executing user deploy command: npx wrangler deploy` completing without the
+"Missing entry-point" error.
 
-## Step 5: bind D1 and R2, and set secrets
+## Step 5: set secrets and finish bindings
 
-In the Pages project -> **Settings > Functions**:
-
-- **D1 database bindings**: add one, variable name `DB`, select the
-  `urban-plaza-cafe` database.
-- **R2 bucket bindings**: add one, variable name `STORAGE`, select the
-  `urban-plaza-cafe-photos` bucket.
-
-In the Pages project -> **Settings > Environment variables**, add these
-(mark them as **Secret** where noted, and set them for the **Production**
-environment):
+On your project's Settings page, scroll to **Variables and secrets** (the
+section visible in your screenshot) and add these, marked **Secret** where
+noted:
 
 | Variable | Value | Notes |
 |---|---|---|
@@ -80,8 +89,13 @@ environment):
 | `RESEND_FROM_EMAIL` | e.g. `orders@yourdomain.com` | Only works once that domain is verified in Resend; otherwise leave unset to use Resend's shared test sender. |
 | `ADMIN_EMAIL` | your real inbox | Where order notifications are sent. |
 
-After adding these, go to **Deployments** and **retry/redeploy** the latest
-deployment so it picks up the new bindings and variables.
+If that same Settings page has a **Bindings** section (look below
+"Variables and secrets"), you can attach the D1 database and R2 bucket
+there instead of editing `wrangler.toml`, use whichever you see; both
+achieve the same thing.
+
+After adding these, redeploy again (Deployments tab -> Retry, or push
+another commit) so the Worker picks them up.
 
 ## Step 6: set up Resend (order notification emails)
 
@@ -99,8 +113,8 @@ silently.
 
 ## Using the site
 
-- Public site: your `*.pages.dev` URL (or your own domain once connected
-  under **Custom domains**).
+- Public site: your `*.workers.dev` URL (shown on the project dashboard), or
+  your own domain once connected under **Custom domains**.
 - Admin panel: `/admin/` on that same URL. Log in with `ADMIN_PASSWORD`
   from Step 5, then change it immediately from the Account tab.
 - Manage menu items (with photos), watch incoming orders, moderate reviews,
@@ -115,24 +129,28 @@ Step 5 above). From this folder:
 ```bash
 npm install -g wrangler
 wrangler d1 execute DB --local --file=schema.sql
-wrangler pages dev public --local --binding ADMIN_PASSWORD=changeme123 --binding SESSION_SECRET=devsecret
+wrangler dev --local --var ADMIN_PASSWORD:changeme123 --var SESSION_SECRET:devsecret
 ```
 
-This runs a local copy of Cloudflare's Pages/Functions/D1/R2 stack on your
-machine (via Miniflare) with local, disposable data, nothing touches your
-real Cloudflare account. Run the `d1 execute` command above before starting
-the dev server each time you delete `.wrangler/` (that folder holds the
-local database file).
+This runs a local copy of Cloudflare's Worker/D1/R2 stack on your machine
+(via Miniflare) with local, disposable data, nothing touches your real
+Cloudflare account. Run the `d1 execute` command above before starting the
+dev server each time you delete `.wrangler/` (that folder holds the local
+database file).
 
 ## A note on how this was built
 
-I wrote and reviewed every file by hand and syntax-checked every Function
-with Node, then ran the whole thing locally with Wrangler's Cloudflare
-Pages/Functions/D1/R2 simulator (Miniflare) and exercised every page and API
-route end to end before handing it to you. I could not reach your actual
-Cloudflare account or a real Resend account from this sandbox, so the very
-last mile (your real bindings, secrets, and email delivery) still needs your
-own verification after deploying.
+I wrote and reviewed every file by hand and syntax-checked every route with
+Node, then ran the whole thing locally with Wrangler's Cloudflare
+Worker/D1/R2 simulator (Miniflare, via `wrangler dev`, the same command
+path your dashboard uses for `wrangler deploy`) and exercised every page
+and API route end to end before handing it to you: page loads, static
+assets, auth gating, admin login, order placement with server-side pricing,
+order status updates, review posting, and a full photo upload/retrieve
+round trip through R2. I could not reach your actual Cloudflare account or
+a real Resend account from this sandbox, so the very last mile (your real
+bindings, secrets, and email delivery) still needs your own verification
+after deploying.
 
 ## Manual test checklist (please run after deploying)
 
@@ -152,18 +170,21 @@ own verification after deploying.
 
 ```
 urban-plaza-cafe-cloudflare/
-  public/                 Static frontend, this is the Pages "build output directory"
+  wrangler.toml            Worker config: name, D1/R2 bindings, static assets directory
+  worker/index.js          The Worker entry point: routes /api and /uploads, serves everything else as static assets
+  public/                  Static frontend (the [assets] directory)
     index.html, menu.html, order.html, about.html
-    admin/                 Admin panel
-    css/, js/               Styles + the 3D showcase, cart, page scripts
-  functions/
-    _shared/auth.js         Password hashing + signed session cookies (Web Crypto, no dependencies)
+    admin/                  Admin panel
+    css/, js/                Styles + the 3D showcase, cart, page scripts
+  functions/                Route handlers, imported by worker/index.js (kept in the
+                             Pages-Functions file layout so nothing had to be rewritten)
+    _shared/auth.js          Password hashing + signed session cookies (Web Crypto, no dependencies)
     api/menu.js, menu/[id].js
     api/reviews.js, reviews/[id].js
-    api/orders.js, orders/[id].js   Order creation + Resend email
+    api/orders.js, orders/[id].js    Order creation + Resend email
     api/settings.js
     api/admin/login.js, logout.js, session.js, change-password.js
-    api/upload.js            Saves photos to R2
-    uploads/[filename].js    Serves photos back out of R2
-  schema.sql                D1 tables + starter content
+    api/upload.js             Saves photos to R2
+    uploads/[filename].js     Serves photos back out of R2
+  schema.sql                 D1 tables + starter content
 ```

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Order Online | Urban Plaza Cafe</title>
+<meta name="description" content="Order Eritrean coffee and food for pickup at Urban Plaza Cafe, Aurora CO.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><circle cx=%2216%22 cy=%2216%22 r=%2214%22 fill=%22%23E1A33E%22/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="brand"><span class="mark"></span> <span data-cafe-name>Urban Plaza Cafe</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="order.html">Order</a>
+      <a href="about.html">About</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="order.html" class="nav-cta">Cart (<span data-cart-count>0</span>)</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">Pickup order</div>
+    <h1>Build your order.</h1>
+    <p class="lede">Add anything from the menu, then submit your order. We'll call to confirm and take payment when you arrive or by phone.</p>
+  </div>
+</header>
+
+<section style="padding-top:10px;">
+  <div class="wrap order-layout">
+    <div class="order-menu" data-order-menu>
+      <p>Loading menu&hellip;</p>
+    </div>
+
+    <aside class="cart-panel">
+      <div data-cart-view>
+        <h3>Your order (<span data-cart-count>0</span>)</h3>
+        <div data-cart-lines></div>
+        <div class="cart-total-row">
+          <span>Total</span>
+          <span data-cart-total>$0.00</span>
+        </div>
+
+        <form class="checkout-form" data-checkout-form>
+          <div class="field">
+            <label>Name</label>
+            <input type="text" name="customerName" placeholder="Your name" required>
+          </div>
+          <div class="field">
+            <label>Phone</label>
+            <input type="tel" name="phone" placeholder="(303) 555-0100" required>
+          </div>
+          <div class="field">
+            <label>Pickup time</label>
+            <input type="text" name="pickupTime" placeholder="As soon as possible">
+          </div>
+          <div class="field">
+            <label>Notes (optional)</label>
+            <textarea name="notes" placeholder="Allergies, special requests..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" data-checkout-btn disabled style="width:100%;">Submit order request</button>
+          <p style="font-size:.78rem;color:var(--text-soft);text-align:center;margin:0;">No payment online. We'll confirm and collect payment when you arrive or by phone.</p>
+          <div class="form-msg" data-order-msg></div>
+        </form>
+      </div>
+
+      <div data-cart-success style="display:none;"></div>
+    </aside>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4 data-cafe-name>Urban Plaza Cafe</h4>
+        <p data-tagline>Eritrean coffee ceremony & kitchen, poured fresh every morning.</p>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <a data-address href="#" data-maps-url>1074 S Ironton St Unit-C, Aurora, CO 80012</a>
+        <a data-phone-href href="tel:">(303) 537-7731</a>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="menu.html">Menu</a>
+        <a href="order.html">Order Online</a>
+        <a href="about.html">About Us</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span data-year></span> <span data-cafe-name>Urban Plaza Cafe</span>. All rights reserved.</span>
+      <a href="admin/index.html" style="color:rgba(251,241,227,.35)">Staff login</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/order-page.js"></script>
+</body>
+</html>
