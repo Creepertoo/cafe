@@ -18,7 +18,7 @@ binding = "ASSETS"
 [[d1_databases]]
 binding = "DB"
 database_name = "urban-plaza-cafe"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "cdf1e6d6-fd1e-4cbf-aea0-62a7d5a88880"
 
 # Same idea for R2: bind it here, or via Settings > Bindings if available.
 [[r2_buckets]]
