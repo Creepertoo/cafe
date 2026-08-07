@@ -2,7 +2,7 @@
 # (via `wrangler deploy`) rather than classic Pages. `name` must match your
 # actual Cloudflare project name exactly, or the dashboard will keep warning
 # about a mismatch, change it below if yours isn't "cafe".
-name = "cafe"
+name = "cafe2"
 main = "worker/index.js"
 compatibility_date = "2024-09-23"
 
