@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin | Urban Plaza Cafe</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+<div id="login-screen" class="login-screen">
+  <div class="login-box">
+    <h1>Staff login</h1>
+    <p>Sign in to edit the menu, site text, colors, contact info, and photos.</p>
+    <form id="login-form">
+      <div class="admin-field">
+        <label>Password</label>
+        <input type="password" name="password" required autofocus>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Sign in</button>
+      <div class="form-msg err" id="login-msg"></div>
+    </form>
+  </div>
+</div>
+
+<div id="admin-shell" class="admin-shell" style="display:none;">
+  <aside class="admin-side">
+    <div class="brand2">Urban Plaza Cafe<br><span style="font-weight:400;opacity:.6;font-size:.78rem;">Admin</span></div>
+    <button class="tab active" data-tab="menu-panel">Menu</button>
+    <button class="tab" data-tab="orders-panel">Orders</button>
+    <button class="tab" data-tab="reviews-panel">Reviews</button>
+    <button class="tab" data-tab="content-panel">Site text</button>
+    <button class="tab" data-tab="colors-panel">Colors</button>
+    <button class="tab" data-tab="contact-panel">Contact & hours</button>
+    <button class="tab" data-tab="account-panel">Account</button>
+    <div class="spacer"></div>
+    <a href="../index.html" target="_blank">View live site &rarr;</a>
+    <button class="tab logout" id="logout-btn">Log out</button>
+  </aside>
+
+  <main class="admin-main">
+
+    <!-- MENU -->
+    <section id="menu-panel" class="admin-panel active">
+      <div class="admin-card">
+        <h3>Add a menu item</h3>
+        <p class="hint">New items appear on the Menu and Order pages immediately.</p>
+        <form id="menu-add-form">
+          <div class="admin-grid2">
+            <div class="admin-field"><label>Name</label><input type="text" name="name" required></div>
+            <div class="admin-field"><label>Category</label><input type="text" name="category" placeholder="e.g. Coffee Ceremony & Drinks" required></div>
+            <div class="admin-field"><label>Price (USD)</label><input type="number" step="0.01" min="0" name="price" required></div>
+            <div class="admin-field"><label>Featured on homepage?</label>
+              <select name="featured"><option value="false">No</option><option value="true">Yes</option></select>
+            </div>
+          </div>
+          <div class="admin-field"><label>Description</label><textarea name="description"></textarea></div>
+          <div class="admin-field">
+            <label>Photo (optional)</label>
+            <input type="file" name="photo" accept="image/*">
+          </div>
+          <button type="submit" class="btn btn-accent">Add item</button>
+          <span class="form-msg" id="menu-add-msg"></span>
+        </form>
+      </div>
+
+      <div class="admin-card">
+        <h3>Current menu</h3>
+        <p class="hint">Edit prices/descriptions inline, toggle availability, or remove an item.</p>
+        <table class="admin-table">
+          <thead><tr><th>Item</th><th>Category</th><th>Price</th><th>Available</th><th></th></tr></thead>
+          <tbody id="menu-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ORDERS -->
+    <section id="orders-panel" class="admin-panel">
+      <div class="admin-card">
+        <h3>Incoming orders</h3>
+        <p class="hint">Newest first. Update status as you prepare each order.</p>
+        <table class="admin-table">
+          <thead><tr><th>When</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
+          <tbody id="orders-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section id="reviews-panel" class="admin-panel">
+      <div class="admin-card">
+        <h3>Reviews</h3>
+        <p class="hint">Remove anything that shouldn't be public. This does not affect your actual Google listing.</p>
+        <table class="admin-table">
+          <thead><tr><th>Name</th><th>Rating</th><th>Review</th><th></th></tr></thead>
+          <tbody id="reviews-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SITE TEXT -->
+    <section id="content-panel" class="admin-panel">
+      <div class="admin-card">
+        <h3>Site text</h3>
+        <p class="hint">These show up across the homepage and about page.</p>
+        <form id="content-form">
+          <div class="admin-field"><label>Cafe name</label><input type="text" name="cafeName"></div>
+          <div class="admin-field"><label>Tagline</label><input type="text" name="tagline"></div>
+          <div class="admin-field"><label>Big headline (homepage, top of page)</label><textarea name="headline"></textarea></div>
+          <div class="admin-field"><label>Hero text (homepage, below headline)</label><textarea name="heroText"></textarea></div>
+          <div class="admin-field"><label>About text</label><textarea name="aboutText"></textarea></div>
+          <button type="submit" class="btn btn-accent">Save text</button>
+          <span class="form-msg" id="content-msg"></span>
+        </form>
+      </div>
+    </section>
+
+    <!-- COLORS -->
+    <section id="colors-panel" class="admin-panel">
+      <div class="admin-card">
+        <h3>Theme colors</h3>
+        <p class="hint">Changes apply site-wide immediately after saving.</p>
+        <form id="colors-form">
+          <div class="admin-grid2">
+            <div class="admin-field"><label>Background</label><input type="color" name="bg"></div>
+            <div class="admin-field"><label>Text / primary</label><input type="color" name="text"></div>
+            <div class="admin-field"><label>Accent (buttons)</label><input type="color" name="accent"></div>
+            <div class="admin-field"><label>Accent 2 (secondary)</label><input type="color" name="accent2"></div>
+            <div class="admin-field"><label>Highlight (badges)</label><input type="color" name="highlight"></div>
+          </div>
+          <button type="submit" class="btn btn-accent">Save colors</button>
+          <span class="form-msg" id="colors-msg"></span>
+        </form>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact-panel" class="admin-panel">
+      <div class="admin-card">
+        <h3>Contact info</h3>
+        <form id="contact-form">
+          <div class="admin-grid2">
+            <div class="admin-field"><label>Phone</label><input type="text" name="phone"></div>
+            <div class="admin-field"><label>Email</label><input type="text" name="email"></div>
+          </div>
+          <div class="admin-field"><label>Address</label><input type="text" name="address"></div>
+          <div class="admin-field"><label>Google Maps link</label><input type="text" name="mapsUrl"></div>
+          <div class="admin-field"><label>Price range note</label><input type="text" name="priceRange"></div>
+          <button type="submit" class="btn btn-accent">Save contact info</button>
+          <span class="form-msg" id="contact-msg"></span>
+        </form>
+      </div>
+
+      <div class="admin-card">
+        <h3>Hours</h3>
+        <p class="hint" id="hours-hint"></p>
+        <div id="hours-editor"></div>
+        <button id="save-hours-btn" class="btn btn-accent" style="margin-top:14px;">Save hours</button>
+        <span class="form-msg" id="hours-msg"></span>
+      </div>
+    </section>
+
+    <!-- ACCOUNT -->
+    <section id="account-panel" class="admin-panel">
+      <div class="admin-card">
+        <h3>Change admin password</h3>
+        <form id="password-form">
+          <div class="admin-field"><label>New password</label><input type="password" name="newPassword" minlength="6" required></div>
+          <button type="submit" class="btn btn-accent">Update password</button>
+          <span class="form-msg" id="password-msg"></span>
+        </form>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="../js/api.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
