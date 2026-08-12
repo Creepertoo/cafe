@@ -4,6 +4,7 @@ function rowToSettings(row) {
   return {
     cafeName: row.cafe_name,
     tagline: row.tagline,
+    headline: row.headline,
     heroText: row.hero_text,
     aboutText: row.about_text,
     phone: row.phone,
@@ -36,6 +37,7 @@ export async function onRequestPut({ request, env }) {
   const merged = {
     cafe_name: body.cafeName ?? current.cafe_name,
     tagline: body.tagline ?? current.tagline,
+    headline: body.headline ?? current.headline,
     hero_text: body.heroText ?? current.hero_text,
     about_text: body.aboutText ?? current.about_text,
     phone: body.phone ?? current.phone,
@@ -51,10 +53,10 @@ export async function onRequestPut({ request, env }) {
   };
 
   await env.DB.prepare(
-    `UPDATE settings SET cafe_name=?, tagline=?, hero_text=?, about_text=?, phone=?, email=?, address=?, maps_url=?, price_range=?, rating=?, review_count=?, colors_json=?, hours_json=?, hours_note=? WHERE id=1`
+    `UPDATE settings SET cafe_name=?, tagline=?, headline=?, hero_text=?, about_text=?, phone=?, email=?, address=?, maps_url=?, price_range=?, rating=?, review_count=?, colors_json=?, hours_json=?, hours_note=? WHERE id=1`
   )
     .bind(
-      merged.cafe_name, merged.tagline, merged.hero_text, merged.about_text, merged.phone, merged.email,
+      merged.cafe_name, merged.tagline, merged.headline, merged.hero_text, merged.about_text, merged.phone, merged.email,
       merged.address, merged.maps_url, merged.price_range, merged.rating, merged.review_count,
       merged.colors_json, merged.hours_json, merged.hours_note
     )
