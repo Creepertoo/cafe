@@ -64,6 +64,7 @@
             <input type="file" name="photo" accept="image/*">
           </div>
           <button type="submit" class="btn btn-accent">Add item</button>
+          <span class="form-msg" id="menu-add-msg"></span>
         </form>
       </div>
 
@@ -109,7 +110,8 @@
         <form id="content-form">
           <div class="admin-field"><label>Cafe name</label><input type="text" name="cafeName"></div>
           <div class="admin-field"><label>Tagline</label><input type="text" name="tagline"></div>
-          <div class="admin-field"><label>Hero text (homepage)</label><textarea name="heroText"></textarea></div>
+          <div class="admin-field"><label>Big headline (homepage, top of page)</label><textarea name="headline"></textarea></div>
+          <div class="admin-field"><label>Hero text (homepage, below headline)</label><textarea name="heroText"></textarea></div>
           <div class="admin-field"><label>About text</label><textarea name="aboutText"></textarea></div>
           <button type="submit" class="btn btn-accent">Save text</button>
           <span class="form-msg" id="content-msg"></span>
