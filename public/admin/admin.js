@@ -103,23 +103,32 @@
   document.getElementById("menu-add-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const form = e.target;
+    const submitBtn = form.querySelector("button[type=submit]");
     const fd = new FormData(form);
-    let image = "";
-    const file = form.querySelector("[name=photo]").files[0];
-    if (file) {
-      const up = await Api.upload("/api/upload", file);
-      image = up.url;
+    submitBtn.disabled = true;
+    try {
+      let image = "";
+      const file = form.querySelector("[name=photo]").files[0];
+      if (file) {
+        const up = await Api.upload("/api/upload", file);
+        image = up.url;
+      }
+      await Api.post("/api/menu", {
+        name: fd.get("name"),
+        category: fd.get("category"),
+        price: Number(fd.get("price")),
+        description: fd.get("description"),
+        featured: fd.get("featured") === "true",
+        image
+      });
+      form.reset();
+      loadMenu();
+      flashMsg("menu-add-msg", "Item added.");
+    } catch (err) {
+      flashMsg("menu-add-msg", err.message || "Could not add item.", true);
+    } finally {
+      submitBtn.disabled = false;
     }
-    await Api.post("/api/menu", {
-      name: fd.get("name"),
-      category: fd.get("category"),
-      price: Number(fd.get("price")),
-      description: fd.get("description"),
-      featured: fd.get("featured") === "true",
-      image
-    });
-    form.reset();
-    loadMenu();
   });
 
   // ---------- Orders ----------
@@ -192,6 +201,7 @@
     const cf = document.getElementById("content-form");
     cf.cafeName.value = s.cafeName || "";
     cf.tagline.value = s.tagline || "";
+    cf.headline.value = s.headline || "";
     cf.heroText.value = s.heroText || "";
     cf.aboutText.value = s.aboutText || "";
 
@@ -212,13 +222,18 @@
   document.getElementById("content-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);
-    await Api.put("/api/settings", {
-      cafeName: fd.get("cafeName"),
-      tagline: fd.get("tagline"),
-      heroText: fd.get("heroText"),
-      aboutText: fd.get("aboutText")
-    });
-    flashMsg("content-msg", "Saved.");
+    try {
+      await Api.put("/api/settings", {
+        cafeName: fd.get("cafeName"),
+        tagline: fd.get("tagline"),
+        headline: fd.get("headline"),
+        heroText: fd.get("heroText"),
+        aboutText: fd.get("aboutText")
+      });
+      flashMsg("content-msg", "Saved.");
+    } catch (err) {
+      flashMsg("content-msg", err.message || "Could not save.", true);
+    }
   });
 
   document.getElementById("colors-form").addEventListener("submit", async (e) => {
@@ -226,21 +241,29 @@
     const fd = new FormData(e.target);
     const colors = { ...currentSettings.colors };
     ["bg", "text", "accent", "accent2", "highlight"].forEach((k) => (colors[k] = fd.get(k)));
-    await Api.put("/api/settings", { colors });
-    flashMsg("colors-msg", "Saved. Refresh the live site to see it.");
+    try {
+      await Api.put("/api/settings", { colors });
+      flashMsg("colors-msg", "Saved. Refresh the live site to see it.");
+    } catch (err) {
+      flashMsg("colors-msg", err.message || "Could not save.", true);
+    }
   });
 
   document.getElementById("contact-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);
-    await Api.put("/api/settings", {
-      phone: fd.get("phone"),
-      email: fd.get("email"),
-      address: fd.get("address"),
-      mapsUrl: fd.get("mapsUrl"),
-      priceRange: fd.get("priceRange")
-    });
-    flashMsg("contact-msg", "Saved.");
+    try {
+      await Api.put("/api/settings", {
+        phone: fd.get("phone"),
+        email: fd.get("email"),
+        address: fd.get("address"),
+        mapsUrl: fd.get("mapsUrl"),
+        priceRange: fd.get("priceRange")
+      });
+      flashMsg("contact-msg", "Saved.");
+    } catch (err) {
+      flashMsg("contact-msg", err.message || "Could not save.", true);
+    }
   });
 
   function renderHoursEditor(hours) {
@@ -262,8 +285,12 @@
       const row = [...rows].find((r) => Number(r.getAttribute("data-idx")) === i);
       return { day: h.day, open: row.querySelector(".hr-open").value, close: row.querySelector(".hr-close").value };
     });
-    await Api.put("/api/settings", { hours });
-    flashMsg("hours-msg", "Saved.");
+    try {
+      await Api.put("/api/settings", { hours });
+      flashMsg("hours-msg", "Saved.");
+    } catch (err) {
+      flashMsg("hours-msg", err.message || "Could not save.", true);
+    }
   });
 
   document.getElementById("password-form").addEventListener("submit", async (e) => {
