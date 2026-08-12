@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Urban Plaza Cafe | Eritrean Coffee Ceremony & Kitchen, Aurora CO</title>
+<meta name="description" content="Urban Plaza Cafe in Aurora, CO: traditional Eritrean coffee ceremony, injera platters, and fresh-brewed coffee. Order online for pickup.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><circle cx=%2216%22 cy=%2216%22 r=%2214%22 fill=%22%23E1A33E%22/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="brand"><span class="mark"></span> <span data-cafe-name>Urban Plaza Cafe</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="order.html">Order</a>
+      <a href="about.html">About</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="order.html" class="nav-cta">Order Online</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Aurora, Colorado</div>
+      <h1 data-headline>The Eritrean coffee ceremony, poured fresh every morning.</h1>
+      <p class="lede" data-hero-text>From hand-roasted beans to a slow-poured jebena, every cup at Urban Plaza Cafe carries the Eritrean coffee ceremony into Aurora.</p>
+      <div class="hero-actions">
+        <a href="order.html" class="btn btn-primary">Order for Pickup</a>
+        <a href="menu.html" class="btn btn-ghost">View Menu</a>
+      </div>
+      <div class="chip-row">
+        <span class="chip" data-hours-today>Open today</span>
+        <span class="chip"><span data-rating>4.0</span> ★ (<span data-review-count>41</span> reviews)</span>
+        <span class="chip" data-price-range>$10-20 per person</span>
+      </div>
+    </div>
+    <div class="hero-stage" data-hero-stage>
+      <div class="hero-stage-hint">Drag to spin</div>
+    </div>
+  </div>
+</header>
+
+<section id="menu-highlights">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Fan favorites</h2>
+      <p>A taste of what's coming out of the kitchen this week. See the full menu for everything we pour and plate.</p>
+    </div>
+    <div class="dish-grid" data-featured-grid></div>
+  </div>
+</section>
+
+<section style="background: var(--surface);">
+  <div class="wrap split">
+    <div class="reveal">
+      <div class="eyebrow">Our story</div>
+      <h2>A little bit of Asmara, in the middle of Aurora.</h2>
+      <p data-about-text style="margin-top:16px;">Urban Plaza Cafe brings the warmth of the traditional Eritrean coffee ceremony to Aurora, Colorado. We roast, brew, and pour coffee the slow way, and pair it with home-style Eritrean breakfast and lunch.</p>
+      <a href="about.html" class="btn btn-green" style="margin-top:10px;">Learn more about us</a>
+    </div>
+    <div class="story-art reveal"></div>
+  </div>
+</section>
+
+<section id="reviews">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>What Aurora is saying</h2>
+      <p>Real reviews from real regulars, straight from our Google listing, plus notes from guests who've left one right here.</p>
+    </div>
+    <div class="review-summary reveal">
+      <div class="review-score" data-review-score>4.0</div>
+      <div>
+        <div class="stars">★★★★☆</div>
+        <div style="font-size:.88rem;color:var(--text-soft);"><span data-review-summary-count>41</span> reviews</div>
+      </div>
+    </div>
+    <div class="review-grid" data-review-grid data-limit="6"></div>
+
+    <div class="review-form reveal">
+      <h3>Leave a review</h3>
+      <p>Tell us and other guests how your visit went.</p>
+      <form data-review-form>
+        <input type="hidden" name="rating" value="0">
+        <div class="form-row">
+          <div class="field">
+            <label>Your name</label>
+            <input type="text" name="name" placeholder="Jane Doe" required>
+          </div>
+          <div class="field">
+            <label>Rating</label>
+            <div class="star-picker">
+              <button type="button" data-star="1">★</button>
+              <button type="button" data-star="2">★</button>
+              <button type="button" data-star="3">★</button>
+              <button type="button" data-star="4">★</button>
+              <button type="button" data-star="5">★</button>
+            </div>
+          </div>
+          <div class="field full">
+            <label>Your review</label>
+            <textarea name="text" placeholder="Tell us about your visit..." required></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-accent" style="margin-top:16px;">Submit review</button>
+        <div class="form-msg" data-form-msg></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4 data-cafe-name>Urban Plaza Cafe</h4>
+        <p data-tagline>Eritrean coffee ceremony & kitchen, poured fresh every morning.</p>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <a data-address href="#" data-maps-url>1074 S Ironton St Unit-C, Aurora, CO 80012</a>
+        <a data-phone-href href="tel:">(303) 537-7731</a>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="menu.html">Menu</a>
+        <a href="order.html">Order Online</a>
+        <a href="about.html">About Us</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span data-year></span> <span data-cafe-name>Urban Plaza Cafe</span>. All rights reserved.</span>
+      <a href="admin/index.html" style="color:rgba(251,241,227,.35)">Staff login</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/index-home.js"></script>
+<script src="js/reviews.js"></script>
+<script type="module" src="js/three-scene.js"></script>
+</body>
+</html>
