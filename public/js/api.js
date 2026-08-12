@@ -47,3 +47,8 @@ const Api = {
     }
   }
 };
+
+// Explicitly expose on window: a top-level `const` does NOT become a
+// `window.X` property in a classic (non-module) script, so other scripts
+// checking `if (window.Api)` would otherwise always see it as missing.
+window.Api = Api;
