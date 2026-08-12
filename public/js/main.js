@@ -60,6 +60,7 @@
     }
     document.querySelectorAll("[data-cafe-name]").forEach((el) => (el.textContent = s.cafeName));
     document.querySelectorAll("[data-tagline]").forEach((el) => (el.textContent = s.tagline));
+    document.querySelectorAll("[data-headline]").forEach((el) => (el.textContent = s.headline));
     document.querySelectorAll("[data-hero-text]").forEach((el) => (el.textContent = s.heroText));
     document.querySelectorAll("[data-about-text]").forEach((el) => (el.textContent = s.aboutText));
     document.querySelectorAll("[data-phone]").forEach((el) => (el.textContent = s.phone));
