@@ -204,6 +204,14 @@
     cf.headline.value = s.headline || "";
     cf.heroText.value = s.heroText || "";
     cf.aboutText.value = s.aboutText || "";
+    cf.storyHeadline.value = s.storyHeadline || "";
+    const preview = document.getElementById("story-image-preview");
+    if (s.storyImage) {
+      preview.src = s.storyImage;
+      preview.style.display = "block";
+    } else {
+      preview.style.display = "none";
+    }
 
     const colf = document.getElementById("colors-form");
     Object.entries(s.colors || {}).forEach(([k, v]) => {
@@ -221,18 +229,32 @@
 
   document.getElementById("content-form").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const fd = new FormData(e.target);
+    const form = e.target;
+    const submitBtn = form.querySelector("button[type=submit]");
+    const fd = new FormData(form);
+    submitBtn.disabled = true;
     try {
-      await Api.put("/api/settings", {
+      const payload = {
         cafeName: fd.get("cafeName"),
         tagline: fd.get("tagline"),
         headline: fd.get("headline"),
         heroText: fd.get("heroText"),
-        aboutText: fd.get("aboutText")
-      });
+        aboutText: fd.get("aboutText"),
+        storyHeadline: fd.get("storyHeadline")
+      };
+      const file = form.querySelector("[name=storyImage]").files[0];
+      if (file) {
+        const up = await Api.upload("/api/upload", file);
+        payload.storyImage = up.url;
+      }
+      await Api.put("/api/settings", payload);
+      form.querySelector("[name=storyImage]").value = "";
+      await loadSettingsIntoForms();
       flashMsg("content-msg", "Saved.");
     } catch (err) {
       flashMsg("content-msg", err.message || "Could not save.", true);
+    } finally {
+      submitBtn.disabled = false;
     }
   });
 
