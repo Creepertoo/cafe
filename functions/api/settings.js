@@ -7,6 +7,8 @@ function rowToSettings(row) {
     headline: row.headline,
     heroText: row.hero_text,
     aboutText: row.about_text,
+    storyHeadline: row.story_headline,
+    storyImage: row.story_image,
     phone: row.phone,
     email: row.email,
     address: row.address,
@@ -40,6 +42,8 @@ export async function onRequestPut({ request, env }) {
     headline: body.headline ?? current.headline,
     hero_text: body.heroText ?? current.hero_text,
     about_text: body.aboutText ?? current.about_text,
+    story_headline: body.storyHeadline ?? current.story_headline,
+    story_image: body.storyImage ?? current.story_image,
     phone: body.phone ?? current.phone,
     email: body.email ?? current.email,
     address: body.address ?? current.address,
@@ -53,10 +57,11 @@ export async function onRequestPut({ request, env }) {
   };
 
   await env.DB.prepare(
-    `UPDATE settings SET cafe_name=?, tagline=?, headline=?, hero_text=?, about_text=?, phone=?, email=?, address=?, maps_url=?, price_range=?, rating=?, review_count=?, colors_json=?, hours_json=?, hours_note=? WHERE id=1`
+    `UPDATE settings SET cafe_name=?, tagline=?, headline=?, hero_text=?, about_text=?, story_headline=?, story_image=?, phone=?, email=?, address=?, maps_url=?, price_range=?, rating=?, review_count=?, colors_json=?, hours_json=?, hours_note=? WHERE id=1`
   )
     .bind(
-      merged.cafe_name, merged.tagline, merged.headline, merged.hero_text, merged.about_text, merged.phone, merged.email,
+      merged.cafe_name, merged.tagline, merged.headline, merged.hero_text, merged.about_text,
+      merged.story_headline, merged.story_image, merged.phone, merged.email,
       merged.address, merged.maps_url, merged.price_range, merged.rating, merged.review_count,
       merged.colors_json, merged.hours_json, merged.hours_note
     )
